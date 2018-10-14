@@ -3,12 +3,12 @@
 
 * **筛选与切片**
 
-| 方法 | 描述 |
-| :------:  | :-----: |
-| filter(Predicate p) | 接收Lambda，从流中排除某些元素 |
-| distinct() | 筛选，通过流所生成元素的 hashCode() 和 equals() 去除重复元素 |
-| limit(long maxSize) | 截断流，使其元素不超过给定数量 | 
-| skip(long n) | 跳过元素，返回一个扔掉了前 n 个元素的流。<br />若流中元素不足 n 个，则返回一个空流。 与 limit(n) 互补 |
+| 方法 | 描述 | 状态 | 
+| :------:  | :-----: | :----: | 
+| filter(Predicate p) | 接收Lambda，从流中排除某些元素 | 无 | 
+| distinct() | 筛选，通过流所生成元素的 hashCode() 和 equals() 去除重复元素 | 有 |
+| limit(long maxSize) | 截断流，使其元素不超过给定数量 | 有 | 
+| skip(long n) | 跳过元素，返回一个扔掉了前 n 个元素的流。<br />若流中元素不足 n 个，则返回一个空流。 与 limit(n) 互补 | 有 |
 
 
 ```java
@@ -84,12 +84,12 @@ public void test5() {
 
 * **映射**
 
-| 方法 | 描述 |
-| :---: | :---: |
-| map(Function f) | 接收一个函数作为参数，该函数会被应用到每个元素上，并将其映射成一个新的元素 |
-| mapToDouble(ToDoubleFunction f) | 接收一个函数作为参数，该函数会被应用到每个元素上，产生一个新的 DoubleStream |
-| mapToInt(ToIntFunction f) | 接收一个函数作为参数，该函数会被应用到每个元素上，产生一个新的 IntStream |
-| flatMap(Funtion f) | 接收一个函数作为参数，将流中的每个值都换成另一个流，然后把所有流连接成一个流 |
+| 方法 | 描述 | 状态 | 
+| :---: | :---: | :---: |
+| map(Function f) | 接收一个函数作为参数，该函数会被应用到每个元素上，并将其映射成一个新的元素 | 无 | 
+| mapToDouble(ToDoubleFunction f) | 接收一个函数作为参数，该函数会被应用到每个元素上，产生一个新的 DoubleStream | 无 | 
+| mapToInt(ToIntFunction f) | 接收一个函数作为参数，该函数会被应用到每个元素上，产生一个新的 IntStream | 无 | 
+| flatMap(Funtion f) | 接收一个函数作为参数，将流中的每个值都换成另一个流，然后把所有流连接成一个流 | 无 |
 
 ```java
 /**
@@ -135,10 +135,11 @@ public static Stream<Character> filterCharacter(String str) {
 
 * **排序**
 
-| 方法 | 描述 |
-| :---: | :---: |
-| sorted() | 产生一个新流，其中按自然顺序排序(Comparable) |
-| sorted(Comparator comp) | 产生一个新流，其中按比较器顺序排序(Comparator) |
+| 方法 | 描述 | 状态 | 
+| :---: | :---: | :---: | 
+| sorted() | 产生一个新流，其中按自然顺序排序(Comparable) | 有 | 
+| sorted(Comparator comp) | 产生一个新流，其中按比较器顺序排序(Comparator) | 有 |
+| unordered() | | 无 |
 
 ```java
 /**

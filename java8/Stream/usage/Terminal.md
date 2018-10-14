@@ -3,17 +3,18 @@
 
 * **查找与匹配**
 
-| 方法 | 描述 |
-| :---: | :---: |
-| allMatch(Predicate p) | 检查是否匹配所有元素 |
-| anyMatch(Predicate p) | 检查是否至少匹配一个元素 |
-| noneMatch(Predicate p) | 检查是否没有匹配所有元素 |
-| findFirst() | 返回第一个元素 |
-| findAny() | 返回当前流中的任意元素 |
-| count | 返回流中元素总数 |
-| max(Comparator c) | 返回流中最大值 |
-| min(Comparator c) | 返回流中最小值 |
-| forEach(Consumer c) | 内部迭代（使用 Collection 接口需要用户去做迭代，称为外部迭代）|
+| 方法 | 描述 | 短路 | 
+| :---: | :---: | :---: |
+| allMatch(Predicate p) | 检查是否匹配所有元素 | 是 |
+| anyMatch(Predicate p) | 检查是否至少匹配一个元素 | 是 | 
+| noneMatch(Predicate p) | 检查是否没有匹配所有元素 | 是 |
+| findFirst() | 返回第一个元素 | 是 | 
+| findAny() | 返回当前流中的任意元素 | 是 |
+| count | 返回流中元素总数 | 否 | 
+| max(Comparator c) | 返回流中最大值 | 否 | 
+| min(Comparator c) | 返回流中最小值 | 否 | 
+| forEach(Consumer c) | 内部迭代（使用 Collection 接口需要用户去做迭代，称为外部迭代）| 否 |
+| forEachOrdered(Consumer c) | 使用 parallel().sorted() 后使用 | 否 |
 
 ```java
 // 模拟数据
@@ -105,10 +106,10 @@ public void test8() {
 
 * **归约**
 
-| 方法 | 描述 |
-| :---: | :---: |
-| reduce(T iden, BinaryOperator b) | 可以将流中元素反复结合起来，得到一个值。返回T|
-| reduce(BinaryOperator b) | 可以将流中元素反复结合起来，得到一个值。返回Optional<T> |
+| 方法 | 描述 | 短路 | 
+| :---: | :---: | :---: | 
+| reduce(T iden, BinaryOperator b) | 可以将流中元素反复结合起来，得到一个值。返回T| 否 | 
+| reduce(BinaryOperator b) | 可以将流中元素反复结合起来，得到一个值。返回Optional<T> | 否 |
 
 ```java
 /**
@@ -131,9 +132,9 @@ public void test9() {
 
 * **收集**
 
-| 方法 | 描述 |
-| :---: | :---: |
-| collect(Collector c) | 将流转换为其他形式。接收一个 Collector 接口的实现，用于给 Stream 中元素做汇总的方法 |
+| 方法 | 描述 | 短路 | 
+| :---: | :---: | :---: |
+| collect(Collector c) | 将流转换为其他形式。接收一个 Collector 接口的实现，用于给 Stream 中元素做汇总的方法 | 否 |
 
 Collector 接口中方法的实现决定了如何对流执行收集操作（如收集到List、Set、Map）。但是 Collectors 实用类提供了很多静态方法，可以方便地创建常见收集器实例。具体方法与实例如下：
 
@@ -302,6 +303,7 @@ public void test11() {
 
     System.out.println("---------------");
 
+	// 最小值
     Optional<Double> min = employees.stream().map(Employee::getSalary).collect(Collectors.minBy(Double::compare));
     System.out.println(min.get());
 }
@@ -311,8 +313,13 @@ public void test11() {
  */
 @Test
 public void test12() {
-    Map<Employee.Status, List<Employee>> map = (Map<Employee.Status, List<Employee>>) employees.stream().collect(Collectors.groupingBy(Employee::getStatus));
+	// 按员工状态分组，得到每个组中员工信息
+    Map<Employee.Status, List<Employee>> map = employees.stream().collect(Collectors.groupingBy(Employee::getStatus));
     System.out.println(map);
+
+	// 按员工状态分组，得到每个组员工个数
+	Map<Employee.Status, Long> map1 = employees.stream().collect(Collectors.groupingBy(Employee::getStatus,Collectors.counting()));
+    System.out.println(map1);
 }
 
 // 多级分组
@@ -338,6 +345,7 @@ public void test14() {
     System.out.println(map);
 }
 
+// 统计信息汇总: 总数(count)、总和(sum)、最小值(min)、最大值(max)、平均值(average)
 @Test
 public void test15() {
     DoubleSummaryStatistics dss = employees.stream().collect(Collectors.summarizingDouble(Employee::getSalary));

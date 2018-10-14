@@ -17,6 +17,7 @@
 		* [终止操作](Stream/usage/Terminal.md)
 	* [Fork/Join框架](Stream/Forkjoin.md)
 	* [并行流](Stream/Parallel.md)
+	* [运行机制](Stream/Mechanism.md)
 * [Optional](Optional.md)
 * [接口方法](Interface/README.md)
 	* [默认方法](Interface/DefaultMethod.md)
